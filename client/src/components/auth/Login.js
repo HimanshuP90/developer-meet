@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import axios from 'axios';
 class Login extends Component {
   constructor(props){
     super(props);
@@ -22,7 +22,10 @@ onSubmit(e){
       email: this.state.email,
       password: this.state.password,
   }
-  console.log(user)
+
+  axios.post('api/users/login', user)
+    .then(res => console.log(res.data))
+    .catch(err => console.log(err.response.data))
 }
 
   render() {
