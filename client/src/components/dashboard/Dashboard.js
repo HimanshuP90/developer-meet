@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'; 
-import { getCurrentPorfile } from '../../actions/profileActions';
+import { getCurrentPorfile, deleteAccount } from '../../actions/profileActions';
 import Spinner from '../common/Spinner';
-
+import ProfileAction from '../dashboard/ProfileAction';
 class Dashboard extends Component {
   componentDidMount() {
     this.props.getCurrentPorfile()
   }
 
+  onDeleteClick(e) {
+    this.props.deleteAccount();
+  }
   render() {
     const { user } = this.props.auth;
     const { profile, loading } = this.props.profile;
@@ -21,7 +24,22 @@ class Dashboard extends Component {
     } else {
         // Check if logged in user has profile data
         if(Object.keys(profile).length > 0) {
-          dashBoardContent = <h4>TODO: DISPLAY PROFILE</h4>
+          dashBoardContent = (
+            <div>
+              <p className="lead text-muted">
+                Welcome <Link to={`/profile/${profile.handle}`}>{user.name}</Link>
+              </p>
+              <ProfileAction />
+              {/* TODO: exp and edu*/}
+              <div style={{ marginBottom: '60px' }} />
+              <button
+                onClick={this.onDeleteClick.bind(this)}
+                className="btn btn-danger"
+              >
+                Delete My Account
+              </button>
+            </div>
+          )
         } else {
           dashBoardContent = (
             <div>
@@ -52,6 +70,7 @@ class Dashboard extends Component {
 
 Dashboard.propTypes = {
   getCurrentPorfile: PropTypes.func.isRequired,
+  deleteAccount: PropTypes.func,
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired
 }
@@ -61,4 +80,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { getCurrentPorfile })(Dashboard);
+export default connect(mapStateToProps, { getCurrentPorfile, deleteAccount })(Dashboard);
