@@ -109,7 +109,6 @@ class EditProfile extends Component {
 
     render() {
         const { errors, displaySocialInputs } = this.state;
-        console.log(errors.handle)
         let socialInputs;
 
         if( displaySocialInputs){
